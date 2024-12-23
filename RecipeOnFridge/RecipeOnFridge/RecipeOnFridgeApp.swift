@@ -12,6 +12,7 @@ struct RecipeOnFridgeApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
+//            AppInfoView()
         }
     }
 }

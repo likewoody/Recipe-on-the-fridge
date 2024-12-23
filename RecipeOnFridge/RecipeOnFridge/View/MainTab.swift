@@ -9,27 +9,31 @@ import SwiftUI
 
 // MARK: View
 struct MainTabView: View {
+    
+    let attributeOptions = AttributeOptions.share
+    @Environment(\.sizeCategory) var sizeCategory
     @State var selectedTab: Int = 0
-    let paddingbetweenImageAndText: CGFloat = 1
-    let tabs = [
-        (imageName: TabItemList.imageName.fridge, selectedImageName: TabItemList.selectedImageName.fridge, text: TabItemList.text.fridge),
-        (imageName: TabItemList.imageName.recipe, selectedImageName: TabItemList.selectedImageName.recipe, text: TabItemList.text.recipe),
-        (imageName: TabItemList.imageName.setting, selectedImageName: TabItemList.selectedImageName.setting, text: TabItemList.text.setting)
-    ]
     
     var body: some View {
         VStack {
             Spacer()
             if selectedTab == 0 {
-                FridgeView()
+                FridgeView(attributeOptions: attributeOptions)
             } else if selectedTab == 1 {
                 RecipeView()
             } else {
-                AppInfoView()
+                AppInfoView(attributeOptions: attributeOptions)
             }
             Spacer()
             tabItemList
         }
+        .background(.white)
+        
+//        .lineLimit(2)
+//        .fixedSize(horizontal: false, vertical: true)
+        .minimumScaleFactor(sizeCategory.customMinScaleFactor)
+//        .multilineTextAlignment(.center)
+//        .frame(maxWidth: .infinity)
         
     }
 }
@@ -37,13 +41,12 @@ struct MainTabView: View {
 
 // MARK: extension
 extension MainTabView {
-    
     private var tabItemList: some View {
         HStack {
-            ForEach(0..<tabs.count, id: \.self) {
+            ForEach(0..<attributeOptions.tabs.count, id: \.self) {
                 index in
                 Spacer()
-                let tab = tabs[index]
+                let tab = attributeOptions.tabs[index]
                 tabItem(
                     imageName: selectedTab == index ? tab.selectedImageName : tab.imageName,
                     text: tab.text
@@ -72,7 +75,7 @@ extension MainTabView {
                 VStack {
                     Image(systemName: imageName)
                         .font(.title2)
-                        .padding(.bottom, paddingbetweenImageAndText)
+                        .padding(.bottom, attributeOptions.paddingbetweenImageAndText)
                     Text(text)
                         .font(.caption2)
                 }
